@@ -1,50 +1,96 @@
 <?php
 
-namespace App\Filament\Resources\MBarangs;
+namespace App\Filament\Resources;
 
-use App\Filament\Resources\MBarangs\Pages\CreateMBarang;
-use App\Filament\Resources\MBarangs\Pages\EditMBarang;
-use App\Filament\Resources\MBarangs\Pages\ListMBarangs;
-use App\Filament\Resources\MBarangs\Schemas\MBarangForm;
-use App\Filament\Resources\MBarangs\Tables\MBarangsTable;
+use App\Filament\Resources\MBarangResource\Pages;
 use App\Models\MBarang;
-use BackedEnum;
-use Filament\Resources\Resource;
+use App\Models\MKategori;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Resources\Resource;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
 
 class MBarangResource extends Resource
 {
     protected static ?string $model = MBarang::class;
-
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-archive-box';
+    protected static ?string $navigationLabel = 'Barang';
+    protected static string|\UnitEnum|null $navigationGroup = 'Master Data';
     protected static ?string $recordTitleAttribute = 'barang_nama';
+    protected static ?int $navigationSort = 3;
 
-    public static function form(Schema $schema): Schema
-    {
-        return MBarangForm::configure($schema);
+    public static function form(Schema $schema): Schema {
+        return $schema->components([
+            Select::make('kategori_id')
+                ->label('Kategori')
+                ->options(MKategori::pluck('kategori_nama', 'kategori_id'))
+                ->required()
+                ->searchable(),
+            TextInput::make('barang_kode')
+                ->label('Kode Barang')
+                ->required()
+                ->maxLength(10)
+                ->unique(ignoreRecord: true),
+            TextInput::make('barang_nama')
+                ->label('Nama Barang')
+                ->required()
+                ->maxLength(100),
+            TextInput::make('harga_beli')
+                ->label('Harga Beli')
+                ->numeric()
+                ->prefix('Rp')
+                ->required(),
+            TextInput::make('harga_jual')
+                ->label('Harga Jual')
+                ->numeric()
+                ->prefix('Rp')
+                ->required(),
+        ]);
     }
 
-    public static function table(Table $table): Table
-    {
-        return MBarangsTable::configure($table);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
+    public static function table(Table $table): Table{
+        return $table
+            ->columns([
+                TextColumn::make('barang_kode')
+                    ->label('Kode')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('barang_nama')
+                    ->label('Nama Barang')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('kategori.kategori_nama')
+                    ->label('Kategori')
+                    ->sortable(),
+                TextColumn::make('harga_beli')
+                    ->label('Harga Beli')
+                    ->money('IDR')
+                    ->sortable(),
+                TextColumn::make('harga_jual')
+                    ->label('Harga Jual')
+                    ->money('IDR')
+                    ->sortable(),
+            ])
+            ->actions([
+                EditAction::make(),
+                DeleteAction::make(),
+            ])
+            ->bulkActions([
+                DeleteBulkAction::make(),
+            ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ListMBarangs::route('/'),
-            'create' => CreateMBarang::route('/create'),
-            'edit' => EditMBarang::route('/{record}/edit'),
+            'index'  => Pages\ListMBarangs::route('/'),
+            'create' => Pages\CreateMBarang::route('/create'),
+            'edit'   => Pages\EditMBarang::route('/{record}/edit'),
         ];
     }
 }

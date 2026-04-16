@@ -1,50 +1,43 @@
 <?php
+namespace App\Filament\Resources;
 
-namespace App\Filament\Resources\MKategoris;
-
-use App\Filament\Resources\MKategoris\Pages\CreateMKategori;
-use App\Filament\Resources\MKategoris\Pages\EditMKategori;
-use App\Filament\Resources\MKategoris\Pages\ListMKategoris;
-use App\Filament\Resources\MKategoris\Schemas\MKategoriForm;
-use App\Filament\Resources\MKategoris\Tables\MKategorisTable;
+use App\Filament\Resources\MKategoriResource\Pages;
 use App\Models\MKategori;
-use BackedEnum;
-use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
+use Filament\Forms\Components\TextInput;
+use Filament\Resources\Resource;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\DeleteBulkAction;
 
-class MKategoriResource extends Resource
-{
+class MKategoriResource extends Resource {
     protected static ?string $model = MKategori::class;
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-tag';
+    protected static ?string $navigationLabel = 'Kategori';
+    protected static string|\UnitEnum|null $navigationGroup = 'Master Data';
+    protected static ?int $navigationSort = 2;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-
-    protected static ?string $recordTitleAttribute = 'kategori_nama';
-
-    public static function form(Schema $schema): Schema
-    {
-        return MKategoriForm::configure($schema);
+    public static function form(Schema $schema): Schema {
+        return $schema->components([
+            TextInput::make('kategori_kode')->label('Kode Kategori')->required()->maxLength(10)->unique(ignoreRecord: true),
+            TextInput::make('kategori_nama')->label('Nama Kategori')->required()->maxLength(100),
+        ]);
     }
 
-    public static function table(Table $table): Table
-    {
-        return MKategorisTable::configure($table);
+    public static function table(Table $table): Table {
+        return $table->columns([
+            TextColumn::make('kategori_kode')->label('Kode')->searchable()->sortable(),
+            TextColumn::make('kategori_nama')->label('Nama Kategori')->searchable()->sortable(),
+        ])->actions([EditAction::make()])
+          ->bulkActions([DeleteBulkAction::make()]);
     }
 
-    public static function getRelations(): array
-    {
+    public static function getPages(): array {
         return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => ListMKategoris::route('/'),
-            'create' => CreateMKategori::route('/create'),
-            'edit' => EditMKategori::route('/{record}/edit'),
+            'index'  => Pages\ListMKategoris::route('/'),
+            'create' => Pages\CreateMKategori::route('/create'),
+            'edit'   => Pages\EditMKategori::route('/{record}/edit'),
         ];
     }
 }
