@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('m_user', function (Blueprint $table) {
             $table->id('user_id');
-            $table->foreignId('level_id')->constrained('m_levels', 'level_id');
+            $table->foreignId('level_id')->constrained('m_level', 'level_id');
             $table->string('username', 20)->unique();
             $table->string('name', 100);
             $table->string('password', 255);
