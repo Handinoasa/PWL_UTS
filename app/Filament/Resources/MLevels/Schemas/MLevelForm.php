@@ -12,7 +12,8 @@ class MLevelForm
         return $schema
             ->components([
                 TextInput::make('level_nama')
-                    ->required(),
+                    ->required()
+                    ->unique(ignoreRecord: true),
                 TextInput::make('level_kode')
                     ->required(),
             ]);

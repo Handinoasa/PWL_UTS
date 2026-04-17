@@ -4,6 +4,7 @@ namespace App\Filament\Resources\TPenjualanDetails\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ViewAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -14,18 +15,24 @@ class TPenjualanDetailsTable
     {
         return $table
             ->columns([
-                TextColumn::make('penjualan_id')
-                    ->numeric()
+                TextColumn::make('penjualan.penjualan_kode')
+                    ->label('No. Transaksi')
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('barang_id')
-                    ->numeric()
+                TextColumn::make('barang.barang_nama')
+                    ->label('Nama Barang')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('harga')
-                    ->numeric()
+                    ->label('Harga')
+                    ->money('IDR')
                     ->sortable(),
                 TextColumn::make('jumlah')
-                    ->numeric()
+                    ->label('Jumlah')
                     ->sortable(),
+                TextColumn::make('subtotal')
+                    ->label('Subtotal')
+                    ->money('IDR'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -39,6 +46,7 @@ class TPenjualanDetailsTable
                 //
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([

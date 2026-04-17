@@ -1,20 +1,24 @@
 <?php
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\MSuppliers;
 
-use App\Filament\Resources\MSupplierResource\Pages;
+use App\Filament\Resources\MSuppliers\Pages;
 use App\Models\MSupplier;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\BulkActionGroup;
 
 class MSupplierResource extends Resource {
     protected static ?string $model = MSupplier::class;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-truck';
     protected static ?string $navigationLabel = 'Supplier';
+    protected static ?string $modelLabel = 'Supplier';
+    protected static ?string $pluralModelLabel = 'Supplier';
     protected static string|\UnitEnum|null $navigationGroup = 'Master Data';
     protected static ?int $navigationSort = 1;
 
@@ -31,9 +35,16 @@ class MSupplierResource extends Resource {
             TextColumn::make('supplier_kode')->label('Kode')->searchable()->sortable(),
             TextColumn::make('supplier_nama')->label('Nama Supplier')->searchable()->sortable(),
             TextColumn::make('supplier_alamat')->label('Alamat')->limit(40),
-            TextColumn::make('created_at')->label('Dibuat')->dateTime('d/m/Y')->sortable(),
-        ])->actions([EditAction::make()])
-          ->bulkActions([DeleteBulkAction::make()]);
+            TextColumn::make('created_at')->label('Tanggal')->dateTime('d/m/Y')->sortable(),
+        ])
+        ->actions([
+            EditAction::make()
+        ])
+        ->bulkActions([
+            BulkActionGroup::make([
+                DeleteBulkAction::make()
+            ]),
+        ]);
     }
 
     public static function getPages(): array {

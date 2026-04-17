@@ -14,12 +14,13 @@ class MUsersTable
     {
         return $table
             ->columns([
-                TextColumn::make('level_id')
-                    ->numeric()
-                    ->sortable(),
+                TextColumn::make('level.level_nama')
+                    ->label('Level')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('username')
                     ->searchable(),
-                TextColumn::make('name')
+                TextColumn::make('nama')
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

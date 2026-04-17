@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\MBarangs;
 
-use App\Filament\Resources\MBarangResource\Pages;
+use App\Filament\Resources\MBarangs\Pages;
 use App\Models\MBarang;
 use App\Models\MKategori;
 use Filament\Schemas\Schema;
@@ -11,15 +11,17 @@ use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
 
 class MBarangResource extends Resource
 {
     protected static ?string $model = MBarang::class;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-archive-box';
     protected static ?string $navigationLabel = 'Barang';
+    protected static ?string $modelLabel = 'Barang';
+    protected static ?string $pluralModelLabel = 'Barang';
     protected static string|\UnitEnum|null $navigationGroup = 'Master Data';
     protected static ?string $recordTitleAttribute = 'barang_nama';
     protected static ?int $navigationSort = 3;
@@ -40,12 +42,12 @@ class MBarangResource extends Resource
                 ->label('Nama Barang')
                 ->required()
                 ->maxLength(100),
-            TextInput::make('harga_beli')
+            TextInput::make('barang_beli')
                 ->label('Harga Beli')
                 ->numeric()
                 ->prefix('Rp')
                 ->required(),
-            TextInput::make('harga_jual')
+            TextInput::make('barang_jual')
                 ->label('Harga Jual')
                 ->numeric()
                 ->prefix('Rp')
@@ -67,11 +69,11 @@ class MBarangResource extends Resource
                 TextColumn::make('kategori.kategori_nama')
                     ->label('Kategori')
                     ->sortable(),
-                TextColumn::make('harga_beli')
+                TextColumn::make('barang_beli')
                     ->label('Harga Beli')
                     ->money('IDR')
                     ->sortable(),
-                TextColumn::make('harga_jual')
+                TextColumn::make('barang_jual')
                     ->label('Harga Jual')
                     ->money('IDR')
                     ->sortable(),

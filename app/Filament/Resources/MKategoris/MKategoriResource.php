@@ -1,15 +1,15 @@
 <?php
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\MKategoris;
 
-use App\Filament\Resources\MKategoriResource\Pages;
+use App\Filament\Resources\MKategoris\Pages;
 use App\Models\MKategori;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteBulkAction;
 
 class MKategoriResource extends Resource {
     protected static ?string $model = MKategori::class;
@@ -17,7 +17,8 @@ class MKategoriResource extends Resource {
     protected static ?string $navigationLabel = 'Kategori';
     protected static string|\UnitEnum|null $navigationGroup = 'Master Data';
     protected static ?int $navigationSort = 2;
-
+    protected static ?string $modelLabel = 'Kategori';
+    protected static ?string $pluralModelLabel = 'Kategori';
     public static function form(Schema $schema): Schema {
         return $schema->components([
             TextInput::make('kategori_kode')->label('Kode Kategori')->required()->maxLength(10)->unique(ignoreRecord: true),
@@ -27,6 +28,7 @@ class MKategoriResource extends Resource {
 
     public static function table(Table $table): Table {
         return $table->columns([
+
             TextColumn::make('kategori_kode')->label('Kode')->searchable()->sortable(),
             TextColumn::make('kategori_nama')->label('Nama Kategori')->searchable()->sortable(),
         ])->actions([EditAction::make()])

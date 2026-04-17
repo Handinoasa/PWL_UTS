@@ -2,8 +2,11 @@
 
 namespace App\Filament\Resources\TPenjualanDetails\Schemas;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use App\Models\TPenjualan;
+use App\Models\MBarang;
 
 class TPenjualanDetailForm
 {
@@ -11,12 +14,21 @@ class TPenjualanDetailForm
     {
         return $schema
             ->components([
-                TextInput::make('penjualan_id')
+                Select::make('penjualan_id')
+                    ->label('No. Transaksi')
+                    ->options(TPenjualan::pluck('penjualan_kode', 'penjualan_id'))
                     ->required()
-                    ->numeric(),
-                TextInput::make('barang_id')
+                    ->searchable(),
+                Select::make('barang_id')
+                    ->label('Barang')
+                    ->options(MBarang::pluck('barang_nama', 'barang_id'))
                     ->required()
-                    ->numeric(),
+                    ->searchable()
+                    ->reactive()
+                    ->afterStateUpdated(function ($state, callable $set) {
+                        $barang = MBarang::find($state);
+                        if ($barang) $set('harga', $barang->barang_jual);
+                    }),
                 TextInput::make('harga')
                     ->required()
                     ->numeric(),

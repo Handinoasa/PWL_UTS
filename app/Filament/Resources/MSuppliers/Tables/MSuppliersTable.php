@@ -16,9 +16,9 @@ class MSuppliersTable
             ->columns([
                 TextColumn::make('supplier_kode')
                     ->searchable(),
-                TextColumn::make('supplier_name')
+                TextColumn::make('supplier_nama')
                     ->searchable(),
-                TextColumn::make('supplier_action')
+                TextColumn::make('supplier_alamat')
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

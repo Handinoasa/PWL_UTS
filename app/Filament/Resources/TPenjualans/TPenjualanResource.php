@@ -1,10 +1,11 @@
 <?php
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\TPenjualans;
 
-use App\Filament\Resources\TPenjualanResource\Pages;
+use App\Filament\Resources\TPenjualans\Pages;
 use App\Models\TPenjualan;
 use App\Models\MUser;
 use App\Models\MBarang;
+use App\Filament\Resources\TPenjualans\Schemas\TPenjualanInfolist;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
@@ -13,15 +14,22 @@ use Filament\Forms\Components\Repeater;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteBulkAction;
 
 class TPenjualanResource extends Resource {
     protected static ?string $model = TPenjualan::class;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-shopping-cart';
     protected static ?string $navigationLabel = 'Penjualan';
+    protected static ?string $modelLabel = 'Penjualan';
+    protected static ?string $pluralModelLabel = 'Penjualan';
     protected static string|\UnitEnum|null $navigationGroup = 'Master Data';
     protected static ?int $navigationSort = 2;
+
+    public static function infolist(Schema $schema): Schema {
+        return TPenjualanInfolist::configure($schema);
+    }
 
     public static function form(Schema $schema): Schema {
         return $schema->components([
@@ -43,7 +51,7 @@ class TPenjualanResource extends Resource {
                         ->reactive()
                         ->afterStateUpdated(function ($state, callable $set) {
                             $barang = MBarang::find($state);
-                            if ($barang) $set('harga', $barang->harga_jual);
+                            if ($barang) $set('harga', $barang->barang_jual);
                         }),
                     TextInput::make('harga')->label('Harga')->numeric()->prefix('Rp')->required(),
                     TextInput::make('jumlah')->label('Jumlah')->numeric()->required()->minValue(1)->default(1),
@@ -61,7 +69,10 @@ class TPenjualanResource extends Resource {
             TextColumn::make('user.nama')->label('Kasir'),
             TextColumn::make('penjualan_tanggal')->label('Tanggal')->dateTime('d/m/Y H:i')->sortable(),
         ])->defaultSort('penjualan_tanggal','desc')
-          ->actions([EditAction::make()])
+          ->actions([
+              ViewAction::make(),
+              EditAction::make(),
+          ])
           ->bulkActions([DeleteBulkAction::make()]);
     }
 
@@ -71,6 +82,7 @@ class TPenjualanResource extends Resource {
         return [
             'index'  => Pages\ListTPenjualans::route('/'),
             'create' => Pages\CreateTPenjualan::route('/create'),
+            'view'   => Pages\ViewTPenjualan::route('/{record}'),
             'edit'   => Pages\EditTPenjualan::route('/{record}/edit'),
         ];
     }

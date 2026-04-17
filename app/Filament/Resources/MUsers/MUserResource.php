@@ -18,9 +18,12 @@ class MUserResource extends Resource
 {
     protected static ?string $model = MUser::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-user';
 
     protected static ?string $recordTitleAttribute = 'nama';
+    protected static ?string $navigationLabel = 'User';
+    protected static ?string $modelLabel = 'User';
+    protected static ?string $pluralModelLabel = 'Users';
 
     public static function form(Schema $schema): Schema
     {

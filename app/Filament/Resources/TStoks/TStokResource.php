@@ -1,7 +1,7 @@
 <?php
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\TStoks;
 
-use App\Filament\Resources\TStokResource\Pages;
+use App\Filament\Resources\TStoks\Pages;
 use App\Models\TStok;
 use App\Models\MSupplier;
 use App\Models\MBarang;
@@ -13,13 +13,15 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteBulkAction;
 
 class TStokResource extends Resource {
     protected static ?string $model = TStok::class;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-list';
     protected static ?string $navigationLabel = 'Stok Masuk';
+     protected static ?string $modelLabel = 'Stok';
+    protected static ?string $pluralModelLabel = 'New Stok';
     protected static string|\UnitEnum|null $navigationGroup = 'Master Data';
     protected static ?int $navigationSort = 1;
 
