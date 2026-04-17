@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('t_penjualan', function (Blueprint $table) {
             $table->id('penjualan_id');
-            $table->foreignId('user_id')->constrained('m_user', 'user_id');
+            $table->foreignId('user_id')->constrained('m_user', 'user_id')->cascadeOnDelete();
             $table->string('pembeli', 50);
             $table->string('penjualan_kode', 20)->unique();
             $table->datetime('penjualan_tanggal');
